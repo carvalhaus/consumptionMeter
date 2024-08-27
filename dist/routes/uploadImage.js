@@ -1,0 +1,50 @@
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.uploadImage = void 0;
+const js_base64_1 = require("js-base64");
+const zod_1 = require("zod");
+const express_1 = require("express");
+const prisma_1 = require("../lib/prisma");
+const MEASURE_TYPES = ['WATER', 'GAS'];
+const uploadImageSchema = zod_1.z.object({
+    image: zod_1.z.string().refine(js_base64_1.Base64.isValid),
+    customer_code: zod_1.z.string(),
+    measure_datetime: zod_1.z.coerce.date(),
+    measure_type: zod_1.z.enum(MEASURE_TYPES),
+});
+const router = (0, express_1.Router)();
+exports.uploadImage = router;
+router.post('/upload', async (req, res, next) => {
+    try {
+        const parsedBody = uploadImageSchema.parse(req.body);
+        const { image, customer_code, measure_datetime, measure_type } = parsedBody;
+        const existingMeasurement = await prisma_1.prisma.measurement.findFirst({
+            where: {
+                measure_datetime: measure_datetime,
+            },
+        });
+        if (existingMeasurement) {
+            return res.status(409).json({
+                error_code: 'DOUBLE_REPORT',
+                error_description: 'Leitura do mês já realizada',
+            });
+        }
+        const upload = await prisma_1.prisma.measurement.create({
+            data: {
+                customer_code,
+                measure_datetime,
+                measure_type,
+                image,
+            },
+        });
+        res.status(200).json(upload);
+    }
+    catch (error) {
+        if (error instanceof zod_1.ZodError) {
+            res.status(400).json({
+                error_code: 'INVALID_DATA',
+                error_description: error.errors,
+            });
+        }
+    }
+});

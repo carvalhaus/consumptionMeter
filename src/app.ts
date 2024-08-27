@@ -1,5 +1,19 @@
 import express from 'express';
+import cors from 'cors';
+
+import { uploadImage } from './routes/uploadImage';
+import bodyParser from 'body-parser';
 
 const app = express();
+const PORT = 3000;
+app.use(express.urlencoded({ extended: true }));
 
-app.listen(3000);
+app.use(cors());
+
+app.use(bodyParser.json());
+
+app.use(uploadImage);
+
+app.listen(PORT, () => {
+  console.log(`Server is running on PORT: ${PORT}`);
+});

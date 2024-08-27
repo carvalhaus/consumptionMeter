@@ -1,0 +1,9 @@
+POST http://localhost:3000/upload
+Content-Type: application/json
+
+{
+  "image": "iVBORw0KGgoAAAANSUhEUgAAAAUAAAAFCAYAAACNbyblAAAAHElEQVQI12P4//8/w38GIAXDIBKE0DHx2FzFQAAAABJRU5ErkJggg==",
+  "customer_code": "1234",
+  "measure_datetime": "2024-09-27T12:34:56Z",
+  "measure_type": "WATER"
+}
