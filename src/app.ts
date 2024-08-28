@@ -10,7 +10,7 @@ app.use(express.urlencoded({ extended: true }));
 
 app.use(cors());
 
-app.use(bodyParser.json());
+app.use(express.json({ limit: '100mb' }));
 
 app.use(uploadImage);
 

@@ -3,6 +3,8 @@ import { z, ZodError } from 'zod';
 import { NextFunction, Request, Response, Router } from 'express';
 import { prisma } from '../lib/prisma';
 
+import { readMeter } from '../lib/vision-pro';
+
 const MEASURE_TYPES = ['WATER', 'GAS'] as const;
 
 const uploadImageSchema = z.object({
@@ -29,12 +31,18 @@ router.post(
         },
       });
 
-      if (existingMeasurement) {
+      if (existingMeasurement !== null) {
         return res.status(409).json({
           error_code: 'DOUBLE_REPORT',
           error_description: 'Leitura do mês já realizada',
         });
       }
+
+      let result: string;
+
+      result = await readMeter(image);
+      const measure_value = parseInt(result, 10);
+      console.log(measure_value);
 
       const upload = await prisma.measurement.create({
         data: {
@@ -42,10 +50,15 @@ router.post(
           measure_datetime,
           measure_type,
           image,
+          measure_value,
         },
       });
 
-      res.status(200).json(upload);
+      res.status(200).json({
+        image_url: upload.image_url,
+        measure_value: upload.measure_value,
+        measure_uuid: upload.measure_uuid,
+      });
     } catch (error) {
       if (error instanceof ZodError) {
         res.status(400).json({

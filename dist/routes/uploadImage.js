@@ -5,6 +5,7 @@ const js_base64_1 = require("js-base64");
 const zod_1 = require("zod");
 const express_1 = require("express");
 const prisma_1 = require("../lib/prisma");
+const vision_pro_1 = require("../lib/vision-pro");
 const MEASURE_TYPES = ['WATER', 'GAS'];
 const uploadImageSchema = zod_1.z.object({
     image: zod_1.z.string().refine(js_base64_1.Base64.isValid),
@@ -23,21 +24,30 @@ router.post('/upload', async (req, res, next) => {
                 measure_datetime: measure_datetime,
             },
         });
-        if (existingMeasurement) {
+        if (existingMeasurement !== null) {
             return res.status(409).json({
                 error_code: 'DOUBLE_REPORT',
                 error_description: 'Leitura do mês já realizada',
             });
         }
+        let result;
+        result = await (0, vision_pro_1.readMeter)(image);
+        const measure_value = parseInt(result, 10);
+        console.log(measure_value);
         const upload = await prisma_1.prisma.measurement.create({
             data: {
                 customer_code,
                 measure_datetime,
                 measure_type,
                 image,
+                measure_value,
             },
         });
-        res.status(200).json(upload);
+        res.status(200).json({
+            image_url: upload.image_url,
+            measure_value: upload.measure_value,
+            measure_uuid: upload.measure_uuid,
+        });
     }
     catch (error) {
         if (error instanceof zod_1.ZodError) {
