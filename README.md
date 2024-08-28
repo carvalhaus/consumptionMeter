@@ -7,12 +7,12 @@ Back-end de um serviço que gerencia a leitura individualizada de consumo de ág
 ### POST /upload
 Responsável por receber uma imagem em base 64, consultar o Gemini e retornar a medida lida pela API.
 
-- [ ] Validar o tipo de dados dos parâmetros enviados (inclusive o base64);
-- [ ] Verificar se já existe uma leitura no mês naquele tipo de leitura;
-- [ ] Integrar com uma API de LLM para extrair o valor da imagem;
+- [x] Validar o tipo de dados dos parâmetros enviados (inclusive o base64);
+- [x] Verificar se já existe uma leitura no mês naquele tipo de leitura;
+- [x] Integrar com uma API de LLM para extrair o valor da imagem;
 - [ ] Retornar um link temporário para a imagem;
-- [ ] Retornar um GUID;
-- [ ] Retornar o valor numérico reconhecido pela LLM.
+- [x] Retornar um GUID;
+- [x] Retornar o valor numérico reconhecido pela LLM.
 
 ### PATCH /confirm
 Responsável por confirmar ou corrigir o valor lido pelo LLM:
