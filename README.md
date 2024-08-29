@@ -24,7 +24,7 @@ Responsável por confirmar ou corrigir o valor lido pelo LLM:
 - [x] NÃO deve fazer novas consultas ao LLM para validar o novo resultado recebido;
 - [x] Retornar resposta de OK ou ERRO dependendo do valor informado.
 
-### GET /<customer code>/list
+### GET /:customer_code/list
 Responsável por listar as medidas realizadas por um determinado cliente.
 
 - [x] Receber o código do cliente e filtrar as medidas realizadas por ele;
