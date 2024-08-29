@@ -44,6 +44,12 @@ router.post(
       const measure_value = parseInt(result, 10);
       console.log(measure_value);
 
+      await prisma.customer.upsert({
+        where: { customer_code },
+        update: {},
+        create: { customer_code },
+      });
+
       const upload = await prisma.measurement.create({
         data: {
           customer_code,

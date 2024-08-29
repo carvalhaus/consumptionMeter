@@ -34,6 +34,11 @@ router.post('/upload', async (req, res, next) => {
         result = await (0, vision_pro_1.readMeter)(image);
         const measure_value = parseInt(result, 10);
         console.log(measure_value);
+        await prisma_1.prisma.customer.upsert({
+            where: { customer_code },
+            update: {},
+            create: { customer_code },
+        });
         const upload = await prisma_1.prisma.measurement.create({
             data: {
                 customer_code,
