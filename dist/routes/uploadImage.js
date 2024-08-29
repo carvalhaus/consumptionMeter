@@ -6,7 +6,8 @@ const zod_1 = require("zod");
 const express_1 = require("express");
 const prisma_1 = require("../lib/prisma");
 const vision_pro_1 = require("../lib/vision-pro");
-const getImageExtensionFromBase64_1 = require("../lib/getImageExtensionFromBase64");
+const getImageMimeTypeFromBase64_1 = require("../lib/getImageMimeTypeFromBase64");
+const tokens_1 = require("../lib/tokens");
 const MEASURE_TYPES = ['WATER', 'GAS'];
 const uploadImageSchema = zod_1.z.object({
     image: zod_1.z.string().refine(js_base64_1.Base64.isValid),
@@ -32,7 +33,7 @@ router.post('/upload', async (req, res, next) => {
             });
         }
         let mimeType;
-        mimeType = (0, getImageExtensionFromBase64_1.getImageMimeTypeFromBase64)(image);
+        mimeType = (0, getImageMimeTypeFromBase64_1.getImageMimeTypeFromBase64)(image);
         let result;
         result = await (0, vision_pro_1.readMeter)(image, mimeType);
         const measure_value = parseInt(result, 10);
@@ -51,8 +52,11 @@ router.post('/upload', async (req, res, next) => {
                 measure_value,
             },
         });
+        const token = upload.measure_uuid;
+        const expirationTime = Date.now() + 10 * 60 * 1000; // Expira após 10 minutos
+        tokens_1.tokens.set(token, expirationTime.toString());
         res.status(200).json({
-            image_url: upload.image_url,
+            image_url: `http://localhost:3000/view-temp-page/${token}`,
             measure_value: upload.measure_value,
             measure_uuid: upload.measure_uuid,
         });

@@ -5,6 +5,7 @@ import { prisma } from '../lib/prisma';
 
 import { readMeter } from '../lib/vision-pro';
 import { getImageMimeTypeFromBase64 } from '../lib/getImageMimeTypeFromBase64';
+import { tokens } from '../lib/tokens';
 
 const MEASURE_TYPES = ['WATER', 'GAS'] as const;
 
@@ -64,8 +65,13 @@ router.post(
         },
       });
 
+      const token = upload.measure_uuid;
+      const expirationTime = Date.now() + 10 * 60 * 1000; // Expira após 10 minutos
+
+      tokens.set(token, expirationTime.toString());
+
       res.status(200).json({
-        image_url: upload.image_url,
+        image_url: `http://localhost:3000/view-temp-page/${token}`,
         measure_value: upload.measure_value,
         measure_uuid: upload.measure_uuid,
       });
