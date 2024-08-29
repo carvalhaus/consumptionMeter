@@ -1,11 +1,7 @@
 import { NextFunction, Request, Response, Router } from 'express';
-import { z, ZodError } from 'zod';
+import { ZodError } from 'zod';
 import { prisma } from '../lib/prisma';
-
-const confirmMeasureSchema = z.object({
-  measure_uuid: z.string(),
-  confirmed_value: z.number().int(),
-});
+import { confirmMeasureSchema } from '../schemas/applicationSchemas';
 
 const router = Router();
 

@@ -1,16 +1,10 @@
 import { Request, Response, Router } from 'express';
 import { prisma } from '../lib/prisma';
-import { z } from 'zod';
-
-const MEASURE_TYPES = ['WATER', 'GAS'] as const;
-
-const customerCodeSchema = z.object({
-  customer_code: z.string(),
-});
-
-const measureTypeSchema = z.object({
-  measure_type: z.enum(MEASURE_TYPES).optional(),
-});
+import { ZodError } from 'zod';
+import {
+  customerCodeSchema,
+  measureTypeSchema,
+} from '../schemas/applicationSchemas';
 
 const router = Router();
 
@@ -76,7 +70,7 @@ router.get('/:customer_code/list', async (req: Request, res: Response) => {
 
     res.status(200).json(customerCode);
   } catch (error) {
-    if (error instanceof z.ZodError) {
+    if (error instanceof ZodError) {
       return res.status(400).json({
         error_code: 'INVALID_TYPE',
         error_description: 'Tipo de medição não permitida',

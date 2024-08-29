@@ -1,25 +1,18 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.uploadImage = void 0;
-const js_base64_1 = require("js-base64");
 const zod_1 = require("zod");
 const express_1 = require("express");
 const prisma_1 = require("../lib/prisma");
 const vision_pro_1 = require("../lib/vision-pro");
 const getImageMimeTypeFromBase64_1 = require("../lib/getImageMimeTypeFromBase64");
 const tokens_1 = require("../lib/tokens");
-const MEASURE_TYPES = ['WATER', 'GAS'];
-const uploadImageSchema = zod_1.z.object({
-    image: zod_1.z.string().refine(js_base64_1.Base64.isValid),
-    customer_code: zod_1.z.string(),
-    measure_datetime: zod_1.z.coerce.date(),
-    measure_type: zod_1.z.enum(MEASURE_TYPES),
-});
+const applicationSchemas_1 = require("../schemas/applicationSchemas");
 const router = (0, express_1.Router)();
 exports.uploadImage = router;
 router.post('/upload', async (req, res, next) => {
     try {
-        const parsedBody = uploadImageSchema.parse(req.body);
+        const parsedBody = applicationSchemas_1.uploadImageSchema.parse(req.body);
         const { image, customer_code, measure_datetime, measure_type } = parsedBody;
         const existingMeasurement = await prisma_1.prisma.measurement.findFirst({
             where: {

@@ -4,15 +4,12 @@ exports.confirmMeasure = void 0;
 const express_1 = require("express");
 const zod_1 = require("zod");
 const prisma_1 = require("../lib/prisma");
-const confirmMeasureSchema = zod_1.z.object({
-    measure_uuid: zod_1.z.string(),
-    confirmed_value: zod_1.z.number().int(),
-});
+const applicationSchemas_1 = require("../schemas/applicationSchemas");
 const router = (0, express_1.Router)();
 exports.confirmMeasure = router;
 router.patch('/confirm', async (req, res, next) => {
     try {
-        const parsedBody = confirmMeasureSchema.parse(req.body);
+        const parsedBody = applicationSchemas_1.confirmMeasureSchema.parse(req.body);
         const { confirmed_value, measure_uuid } = parsedBody;
         const confirmedValue = await prisma_1.prisma.measurement.findUnique({
             where: {

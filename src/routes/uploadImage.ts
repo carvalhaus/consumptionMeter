@@ -1,20 +1,11 @@
-import { Base64 } from 'js-base64';
-import { z, ZodError } from 'zod';
+import { ZodError } from 'zod';
 import { NextFunction, Request, Response, Router } from 'express';
 import { prisma } from '../lib/prisma';
 
 import { readMeter } from '../lib/vision-pro';
 import { getImageMimeTypeFromBase64 } from '../lib/getImageMimeTypeFromBase64';
 import { tokens } from '../lib/tokens';
-
-const MEASURE_TYPES = ['WATER', 'GAS'] as const;
-
-const uploadImageSchema = z.object({
-  image: z.string().refine(Base64.isValid),
-  customer_code: z.string(),
-  measure_datetime: z.coerce.date(),
-  measure_type: z.enum(MEASURE_TYPES),
-});
+import { uploadImageSchema } from '../schemas/applicationSchemas';
 
 const router = Router();
 
