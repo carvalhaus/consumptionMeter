@@ -4,6 +4,7 @@ import { NextFunction, Request, Response, Router } from 'express';
 import { prisma } from '../lib/prisma';
 
 import { readMeter } from '../lib/vision-pro';
+import { getImageMimeTypeFromBase64 } from '../lib/getImageExtensionFromBase64';
 
 const MEASURE_TYPES = ['WATER', 'GAS'] as const;
 
@@ -38,9 +39,12 @@ router.post(
         });
       }
 
+      let mimeType: string | null;
+      mimeType = getImageMimeTypeFromBase64(image);
+
       let result: string;
 
-      result = await readMeter(image);
+      result = await readMeter(image, mimeType);
       const measure_value = parseInt(result, 10);
       console.log(measure_value);
 

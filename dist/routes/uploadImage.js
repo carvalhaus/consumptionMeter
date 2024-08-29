@@ -6,6 +6,7 @@ const zod_1 = require("zod");
 const express_1 = require("express");
 const prisma_1 = require("../lib/prisma");
 const vision_pro_1 = require("../lib/vision-pro");
+const getImageExtensionFromBase64_1 = require("../lib/getImageExtensionFromBase64");
 const MEASURE_TYPES = ['WATER', 'GAS'];
 const uploadImageSchema = zod_1.z.object({
     image: zod_1.z.string().refine(js_base64_1.Base64.isValid),
@@ -30,8 +31,10 @@ router.post('/upload', async (req, res, next) => {
                 error_description: 'Leitura do mês já realizada',
             });
         }
+        let mimeType;
+        mimeType = (0, getImageExtensionFromBase64_1.getImageMimeTypeFromBase64)(image);
         let result;
-        result = await (0, vision_pro_1.readMeter)(image);
+        result = await (0, vision_pro_1.readMeter)(image, mimeType);
         const measure_value = parseInt(result, 10);
         console.log(measure_value);
         await prisma_1.prisma.customer.upsert({
