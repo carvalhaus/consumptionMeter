@@ -2,7 +2,6 @@ import express from 'express';
 import cors from 'cors';
 
 import { uploadImage } from './routes/uploadImage';
-import bodyParser from 'body-parser';
 import { confirmMeasure } from './routes/confirmMeasure';
 import { getCustomerCodeList } from './routes/getCustomerCodeList';
 import { getTemporaryPage } from './routes/getTemporaryPage';

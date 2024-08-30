@@ -27,7 +27,7 @@ function fileToGenerativePart(
 export async function readMeter(
   image64: string,
   mimeType: string | null,
-): Promise<any> {
+): Promise<string> {
   if (mimeType === null) {
     throw new Error();
   }

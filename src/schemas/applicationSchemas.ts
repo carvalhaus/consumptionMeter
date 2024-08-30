@@ -1,5 +1,5 @@
 import { Base64 } from 'js-base64';
-import { z, ZodError } from 'zod';
+import { z } from 'zod';
 
 const MEASURE_TYPES = ['WATER', 'GAS'] as const;
 
