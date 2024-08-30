@@ -10,7 +10,7 @@ const tokens_1 = require("../lib/tokens");
 const applicationSchemas_1 = require("../schemas/applicationSchemas");
 const router = (0, express_1.Router)();
 exports.uploadImage = router;
-router.post('/upload', async (req, res, next) => {
+router.post('/upload', async (req, res) => {
     try {
         const parsedBody = applicationSchemas_1.uploadImageSchema.parse(req.body);
         const { image, customer_code, measure_datetime, measure_type } = parsedBody;
@@ -25,10 +25,8 @@ router.post('/upload', async (req, res, next) => {
                 error_description: 'Leitura do mês já realizada',
             });
         }
-        let mimeType;
-        mimeType = (0, getImageMimeTypeFromBase64_1.getImageMimeTypeFromBase64)(image);
-        let result;
-        result = await (0, vision_pro_1.readMeter)(image, mimeType);
+        const mimeType = (0, getImageMimeTypeFromBase64_1.getImageMimeTypeFromBase64)(image);
+        const result = await (0, vision_pro_1.readMeter)(image, mimeType);
         const measure_value = parseInt(result, 10);
         console.log(measure_value);
         await prisma_1.prisma.customer.upsert({

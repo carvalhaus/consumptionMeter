@@ -7,7 +7,7 @@ const prisma_1 = require("../lib/prisma");
 const applicationSchemas_1 = require("../schemas/applicationSchemas");
 const router = (0, express_1.Router)();
 exports.confirmMeasure = router;
-router.patch('/confirm', async (req, res, next) => {
+router.patch('/confirm', async (req, res) => {
     try {
         const parsedBody = applicationSchemas_1.confirmMeasureSchema.parse(req.body);
         const { confirmed_value, measure_uuid } = parsedBody;
