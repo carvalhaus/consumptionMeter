@@ -26,7 +26,18 @@ function MeasureForm() {
     },
   });
 
-  const onSubmit: SubmitHandler<IMeasureForm> = (data) => console.log(data);
+  const onSubmit: SubmitHandler<IMeasureForm> = (data) => {
+    const currentDate = new Date().toISOString();
+
+    const measureDate = new Date(data.measure_datetime);
+    const fullDate = new Date(
+      `${measureDate.toISOString().split("T")[0]}T${currentDate.split("T")[1]}`
+    ).toISOString();
+
+    data.measure_datetime = fullDate;
+
+    console.log(data);
+  };
 
   const handleImageCapture = (image: string) => {
     setValue("image_base64", image, { shouldValidate: true });
