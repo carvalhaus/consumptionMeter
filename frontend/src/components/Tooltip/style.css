@@ -1,6 +1,6 @@
 .tooltip {
   position: relative;
-  display: inline-block;
+  display: flex;
   text-decoration: none;
   color: #2d6a4f;
   font-family: inherit;

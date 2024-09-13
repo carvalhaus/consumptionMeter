@@ -57,6 +57,11 @@ input {
   width: auto;
 }
 
+form .error-message {
+  color: red;
+  font-style: italic;
+  font-size: 0.875rem;
+}
 @media (max-width: 768px) {
   section {
     padding: 1rem;
