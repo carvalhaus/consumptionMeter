@@ -36,6 +36,18 @@ main {
   box-sizing: border-box;
 }
 
+header {
+  display: flex;
+  align-items: center;
+  gap: 2rem;
+}
+
+.icon,
+.icon img {
+  height: 2rem;
+  width: 2rem;
+}
+
 h1 {
   color: #2d6a4f;
   font-size: 3rem;
@@ -104,7 +116,16 @@ button:focus-visible {
 
 @media (max-width: 768px) {
   #root {
-    padding: 1rem;
+    padding: 0.5rem;
+  }
+
+  header {
+    gap: 1rem;
+  }
+
+  .icon,
+  .icon img {
+    /* margin-left: -1.725rem; */
   }
 
   h1 {

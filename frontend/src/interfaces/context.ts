@@ -5,4 +5,5 @@ export interface IContextAPI {
   loading: boolean;
   error: string | null;
   getMeasurements: (params: IMeasurementsParams) => Promise<void>;
+  setMeasurements: (measurements: IMeasurementsResponse | null) => void;
 }

@@ -39,7 +39,7 @@ function useMeasurements() {
     }
   };
 
-  return { measurements, loading, error, getMeasurements };
+  return { measurements, setMeasurements, loading, error, getMeasurements };
 }
 
 export default useMeasurements;

@@ -4,9 +4,12 @@ import { useApi } from "../contexts/ContextAPI";
 import { useEffect, useState } from "react";
 import { IMeasurementsParams } from "../interfaces/measurements";
 import MeasurementTable from "../components/MeasurementTable";
+import returnPage from "../assets/arrowback.svg";
+import { Link } from "react-router-dom";
 
 function MeasurementHistory() {
-  const { getMeasurements, measurements, loading, error } = useApi();
+  const { getMeasurements, measurements, setMeasurements, loading, error } =
+    useApi();
 
   const [customerCode, setCustomerCode] = useState<string | null>(null);
 
@@ -17,19 +20,29 @@ function MeasurementHistory() {
     }
   }, [customerCode]);
 
+  useEffect(() => {
+    return () => {
+      setMeasurements(null);
+    };
+  }, []);
+
   console.log(measurements);
 
   return (
     <main>
-      <h1>Histórico de medições</h1>
+      <header>
+        <Link to={"/"} className="icon">
+          <img src={returnPage} alt="Ícone para retornar" />
+        </Link>
+        <h1>Histórico de medições</h1>
+      </header>
 
       <AddCustomerCode setCustomerCode={setCustomerCode} />
 
+      {loading && <h2>Loading...</h2>}
 
-      {loading && <p>Loading...</p>}
+      {error && <h2>{error}</h2>}
 
-      {error && <p>Error: {error}</p>}
-      
       {measurements && <MeasurementTable measurements={measurements} />}
     </main>
   );

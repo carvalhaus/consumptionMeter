@@ -1,6 +1,7 @@
 import { IMeasurementsResponse } from "../../interfaces/measurements";
-import { format } from "date-fns";
-import { ptBR } from "date-fns/locale";
+import { formatDate } from "../../utils/formatDate";
+import { translateMeasureType } from "../../utils/translateMeasureType";
+
 import "./style.css";
 
 interface MeasurementTableProps {
@@ -8,11 +9,6 @@ interface MeasurementTableProps {
 }
 
 function MeasurementTable({ measurements }: MeasurementTableProps) {
-  const formatDate = (dateString: string): string => {
-    const date = new Date(dateString);
-    return format(date, "dd/MM/yyyy HH:mm:ss", { locale: ptBR });
-  };
-
   return (
     <section>
       <table className="measurement-table">
@@ -29,7 +25,7 @@ function MeasurementTable({ measurements }: MeasurementTableProps) {
             <tr key={measurement.measure_uuid}>
               <td>{index + 1}</td>
               <td>{formatDate(measurement.measure_datetime)}</td>
-              <td>{measurement.measure_type}</td>
+              <td>{translateMeasureType(measurement.measure_type)}</td>
               <td>{measurement.measure_value}</td>
             </tr>
           ))}
