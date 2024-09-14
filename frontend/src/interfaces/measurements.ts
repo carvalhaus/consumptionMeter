@@ -4,6 +4,7 @@ export interface IMeasurement {
   measure_type: string;
   has_confirmed: boolean;
   image_url: string;
+  measure_value: number;
 }
 
 export interface IMeasurementsResponse {
