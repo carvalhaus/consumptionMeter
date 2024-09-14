@@ -19,12 +19,27 @@ interface ContextAPIProviderProps {
 }
 
 function ContextAPIProvider({ children }: ContextAPIProviderProps) {
-  const { measurements, setMeasurements, loading, error, getMeasurements } =
-    useMeasurements();
+  const {
+    measurements,
+    setMeasurements,
+    loading,
+    error,
+    getMeasurements,
+    postMeasurement,
+    setUploadMeasurement,
+  } = useMeasurements();
 
   return (
     <ContextAPI.Provider
-      value={{ measurements, setMeasurements, loading, error, getMeasurements }}
+      value={{
+        measurements,
+        setMeasurements,
+        loading,
+        error,
+        getMeasurements,
+        postMeasurement,
+        setUploadMeasurement,
+      }}
     >
       {children}
     </ContextAPI.Provider>

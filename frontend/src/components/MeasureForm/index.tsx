@@ -2,15 +2,18 @@ import { Controller, SubmitHandler, useForm } from "react-hook-form";
 import "./style.css";
 import Tooltip from "../Tooltip";
 import CameraCapture from "../CameraCapture";
+import { useApi } from "../../contexts/ContextAPI";
 
 interface IMeasureForm {
-  image_base64: string;
+  image: string;
   customer_code: string;
   measure_datetime: string;
-  measure_type: string;
+  measure_type: "WATER" | "GAS" | "";
 }
 
 function MeasureForm() {
+  const { postMeasurement } = useApi();
+
   const {
     control,
     register,
@@ -19,14 +22,14 @@ function MeasureForm() {
     formState: { errors },
   } = useForm<IMeasureForm>({
     defaultValues: {
-      image_base64: "",
+      image: "",
       customer_code: "",
       measure_datetime: new Date().toISOString().split("T")[0],
       measure_type: "",
     },
   });
 
-  const onSubmit: SubmitHandler<IMeasureForm> = (data) => {
+  const onSubmit: SubmitHandler<IMeasureForm> = async (data) => {
     const currentDate = new Date().toISOString();
 
     const measureDate = new Date(data.measure_datetime);
@@ -34,13 +37,27 @@ function MeasureForm() {
       `${measureDate.toISOString().split("T")[0]}T${currentDate.split("T")[1]}`
     ).toISOString();
 
-    data.measure_datetime = fullDate;
+    const cleanedBase64 = data.image.replace(/^data:image\/\w+;base64,/, "");
 
-    console.log(data);
+    const measurementRequest = {
+      image: cleanedBase64,
+      customer_code: data.customer_code,
+      measure_datetime: fullDate,
+      measure_type: data.measure_type,
+    };
+
+    console.log(measurementRequest);
+
+    try {
+      await postMeasurement(measurementRequest);
+      console.log("Measurement posted successfully");
+    } catch (error) {
+      console.error("Error posting measurement:", error);
+    }
   };
 
   const handleImageCapture = (image: string) => {
-    setValue("image_base64", image, { shouldValidate: true });
+    setValue("image", image, { shouldValidate: true });
   };
 
   return (
@@ -81,14 +98,14 @@ function MeasureForm() {
             <Tooltip />
           </div>
           <Controller
-            name="image_base64"
+            name="image"
             control={control}
             rules={{ required: "A imagem é obrigatória" }}
             render={() => (
               <>
                 <CameraCapture onCapture={handleImageCapture} />
-                {errors.image_base64 && (
-                  <p className="error-message">{errors.image_base64.message}</p>
+                {errors.image && (
+                  <p className="error-message">{errors.image.message}</p>
                 )}
               </>
             )}
