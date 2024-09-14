@@ -10,7 +10,7 @@ interface ConfirmFormProps {
 }
 
 function ConfirmForm({ setModalOpen }: ConfirmFormProps) {
-  const { loading, postResponse } = useApi();
+  const { loading, postResponse, patchMeasurement } = useApi();
 
   const {
     register,
@@ -33,8 +33,20 @@ function ConfirmForm({ setModalOpen }: ConfirmFormProps) {
     }
   }, [postResponse, setValue]);
 
-  const onSubmit: SubmitHandler<IMeasurementPostResponse> = () => {
-    setModalOpen();
+  const onSubmit: SubmitHandler<IMeasurementPostResponse> = async (data) => {
+    try {
+      const { measure_uuid, measure_value } = data;
+
+      const parsedValue = parseInt(measure_value.toString());
+
+      console.log(measure_uuid, typeof parsedValue);
+
+      await patchMeasurement(measure_uuid, parsedValue);
+
+      setModalOpen();
+    } catch (error) {
+      console.error("Error submitting form:", error);
+    }
   };
 
   return (
@@ -54,7 +66,7 @@ function ConfirmForm({ setModalOpen }: ConfirmFormProps) {
             <label className="confirm-label">
               Valor medido
               <input
-                type="text"
+                type="number"
                 id="measure_value"
                 {...register("measure_value", {
                   required: "Valor medido é obrigatório",

@@ -14,4 +14,8 @@ export interface IContextAPI {
   postMeasurement: (measurement: IMeasurementRequest) => void;
   postResponse: IMeasurementPostResponse | null;
   setPostResponse: (data: IMeasurementPostResponse | null) => void;
+  patchMeasurement: (
+    measure_uuid: string,
+    confirmed_value: number
+  ) => Promise<void>;
 }

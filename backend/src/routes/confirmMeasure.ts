@@ -35,17 +35,16 @@ router.patch('/confirm', async (req: Request, res: Response) => {
       });
     }
 
-    if (confirmedValue.measure_value === confirmed_value) {
-      await prisma.measurement.update({
-        where: {
-          measure_uuid: measure_uuid,
-        },
-        data: {
-          has_confirmed: true,
-        },
-      });
-      res.status(200).json({ success: true });
-    }
+    await prisma.measurement.update({
+      where: {
+        measure_uuid: measure_uuid,
+      },
+      data: {
+        has_confirmed: true,
+        measure_value: confirmed_value,
+      },
+    });
+    res.status(200).json({ success: true });
   } catch (error) {
     if (error instanceof ZodError) {
       res.status(400).json({

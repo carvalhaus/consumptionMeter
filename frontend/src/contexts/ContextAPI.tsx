@@ -28,6 +28,7 @@ function ContextAPIProvider({ children }: ContextAPIProviderProps) {
     postMeasurement,
     postResponse,
     setPostResponse,
+    patchMeasurement,
   } = useMeasurements();
 
   return (
@@ -41,6 +42,7 @@ function ContextAPIProvider({ children }: ContextAPIProviderProps) {
         postMeasurement,
         postResponse,
         setPostResponse,
+        patchMeasurement,
       }}
     >
       {children}
