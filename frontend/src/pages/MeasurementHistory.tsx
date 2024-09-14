@@ -2,31 +2,33 @@
 import AddCustomerCode from "../components/AddCustomerCode";
 import { useApi } from "../contexts/ContextAPI";
 import { useEffect, useState } from "react";
-import { IMeasurementsParams } from "../interfaces/measurements";
 import MeasurementTable from "../components/MeasurementTable";
 import returnPage from "../assets/arrowback.svg";
 import { Link } from "react-router-dom";
-
+import FilterTypeMeasurement from "../components/FilterTypeMeasurement";
 function MeasurementHistory() {
   const { getMeasurements, measurements, setMeasurements, loading, error } =
     useApi();
 
   const [customerCode, setCustomerCode] = useState<string | null>(null);
+  const [measureType, setMeasureType] = useState<string | null>(null);
 
   useEffect(() => {
     if (customerCode) {
-      const params: IMeasurementsParams = { customer_code: customerCode };
+      const params = {
+        customer_code: customerCode,
+        measure_type: measureType || "",
+      };
       getMeasurements(params);
     }
-  }, [customerCode]);
+  }, [customerCode, measureType]);
 
   useEffect(() => {
     return () => {
       setMeasurements(null);
+      setMeasureType(null);
     };
   }, []);
-
-  console.log(measurements);
 
   return (
     <main>
@@ -39,11 +41,15 @@ function MeasurementHistory() {
 
       <AddCustomerCode setCustomerCode={setCustomerCode} />
 
+      <FilterTypeMeasurement setMeasureType={setMeasureType} />
+
       {loading && <h2>Loading...</h2>}
 
       {error && <h2>{error}</h2>}
 
-      {measurements && <MeasurementTable measurements={measurements} />}
+      {measurements && !loading && !error && (
+        <MeasurementTable measurements={measurements} />
+      )}
     </main>
   );
 }

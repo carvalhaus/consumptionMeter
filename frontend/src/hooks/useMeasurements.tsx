@@ -10,13 +10,20 @@ function useMeasurements() {
   const [loading, setLoading] = useState<boolean>(false);
   const [error, setError] = useState<string | null>(null);
 
-  const getMeasurements = async ({ customer_code }: IMeasurementsParams) => {
+  const getMeasurements = async ({
+    customer_code,
+    measure_type,
+  }: IMeasurementsParams) => {
     try {
       setLoading(true);
 
-      const response = await fetch(
-        `${import.meta.env.VITE_BASE_URL}/${customer_code}/list`
-      );
+      let url = `${import.meta.env.VITE_BASE_URL}/${customer_code}/list`;
+
+      if (measure_type) {
+        url += `?measure_type=${measure_type}`;
+      }
+
+      const response = await fetch(url);
 
       const data: IMeasurementsResponse = await response.json();
 

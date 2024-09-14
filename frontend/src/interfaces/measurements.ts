@@ -14,4 +14,5 @@ export interface IMeasurementsResponse {
 
 export interface IMeasurementsParams {
   customer_code: string;
+  measure_type?: string;
 }
