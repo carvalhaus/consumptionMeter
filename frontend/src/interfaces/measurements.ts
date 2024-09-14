@@ -19,6 +19,12 @@ export interface IMeasurementRequest {
   measure_type: "WATER" | "GAS" | "";
 }
 
+export interface IMeasurementPostResponse {
+  image_url: string;
+  measure_value: number;
+  measure_uuid: string;
+}
+
 export interface IMeasurementsParams {
   customer_code: string;
   measure_type?: string;

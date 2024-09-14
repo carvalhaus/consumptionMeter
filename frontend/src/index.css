@@ -60,9 +60,15 @@ h1 {
 
 h2 {
   color: #40916c;
-  font-size: 1.25rem;
+  font-size: 1.5rem;
   margin: 0;
   width: 60%;
+}
+
+h3 {
+  color: #2d6a4f;
+  font-size: 1.25rem;
+  margin: 0;
 }
 
 p {
@@ -89,14 +95,15 @@ button:focus-visible {
   outline: 4px auto -webkit-focus-ring-color;
 }
 
-.history {
+.link {
   color: #40916c;
   font-weight: 700;
   text-decoration: none;
   position: relative;
+  width: auto;
 }
 
-.history::after {
+.link::after {
   content: "";
   position: absolute;
   width: 100%;
@@ -109,7 +116,7 @@ button:focus-visible {
   transition: transform 0.4s ease-out;
 }
 
-.history:hover::after {
+.link:hover::after {
   transform: scaleX(1);
   transform-origin: bottom left;
 }
@@ -134,8 +141,12 @@ button:focus-visible {
   }
 
   h2 {
-    font-size: 1rem;
+    font-size: 1.25rem;
     width: 80%;
+  }
+
+  h3 {
+    font-size: 1.125rem;
   }
 
   p {

@@ -1,5 +1,6 @@
 import { useState } from "react";
 import {
+  IMeasurementPostResponse,
   IMeasurementRequest,
   IMeasurementsParams,
   IMeasurementsResponse,
@@ -8,8 +9,8 @@ import {
 function useMeasurements() {
   const [measurements, setMeasurements] =
     useState<IMeasurementsResponse | null>(null);
-  const [uploadMeasurement, setUploadMeasurement] =
-    useState<IMeasurementsResponse | null>(null);
+  const [postResponse, setPostResponse] =
+    useState<IMeasurementPostResponse | null>(null);
   const [loading, setLoading] = useState<boolean>(false);
   const [error, setError] = useState<string | null>(null);
 
@@ -65,20 +66,18 @@ function useMeasurements() {
 
       if (data.error_description) {
         setError(data.error_description);
-        setUploadMeasurement(null);
+        setPostResponse(null);
       } else {
-        setUploadMeasurement(data);
+        setPostResponse(data);
         setError(null);
       }
-
-      return console.log(data);
     } catch (err) {
       if (err instanceof Error) {
         setError(err.message);
       } else {
         setError("An unknown error occurred");
       }
-      setMeasurements(null);
+      setPostResponse(null);
     } finally {
       setLoading(false);
     }
@@ -90,8 +89,8 @@ function useMeasurements() {
     loading,
     error,
     getMeasurements,
-    uploadMeasurement,
-    setUploadMeasurement,
+    postResponse,
+    setPostResponse,
     postMeasurement,
   };
 }

@@ -4,6 +4,9 @@ import Tooltip from "../Tooltip";
 import CameraCapture from "../CameraCapture";
 import { useApi } from "../../contexts/ContextAPI";
 
+import { useState } from "react";
+import ConfirmForm from "../ConfirmForm";
+
 interface IMeasureForm {
   image: string;
   customer_code: string;
@@ -13,6 +16,8 @@ interface IMeasureForm {
 
 function MeasureForm() {
   const { postMeasurement } = useApi();
+
+  const [modalOpen, setModalOpen] = useState<boolean>(false);
 
   const {
     control,
@@ -49,6 +54,7 @@ function MeasureForm() {
     console.log(measurementRequest);
 
     try {
+      setModalOpen(true);
       await postMeasurement(measurementRequest);
       console.log("Measurement posted successfully");
     } catch (error) {
@@ -61,89 +67,93 @@ function MeasureForm() {
   };
 
   return (
-    <section>
-      <form onSubmit={handleSubmit(onSubmit)}>
-        <div className="input-label">
-          <p>Tipo de medição</p>
-          <label className="input-label measure_type">
-            <input
-              type="radio"
-              id="measure_type"
-              value="WATER"
-              {...register("measure_type", {
-                required: "Tipo de medição é obrigatório",
-              })}
-            />
-            Água
-          </label>
-          <label className="input-label measure_type">
-            <input
-              type="radio"
-              id="measure_type"
-              value="GAS"
-              {...register("measure_type", {
-                required: "Tipo de medição é obrigatório",
-              })}
-            />
-            Gás
-          </label>
-          {errors.measure_type && (
-            <p className="error-message">{errors.measure_type.message}</p>
-          )}
-        </div>
-
-        <div className="input-label">
-          <div>
-            <label htmlFor="image_base64">Imagem</label>
-            <Tooltip />
-          </div>
-          <Controller
-            name="image"
-            control={control}
-            rules={{ required: "A imagem é obrigatória" }}
-            render={() => (
-              <>
-                <CameraCapture onCapture={handleImageCapture} />
-                {errors.image && (
-                  <p className="error-message">{errors.image.message}</p>
-                )}
-              </>
+    <>
+      <section>
+        <form onSubmit={handleSubmit(onSubmit)}>
+          <div className="input-label">
+            <p>Tipo de medição</p>
+            <label className="input-label measure_type">
+              <input
+                type="radio"
+                id="measure_type"
+                value="WATER"
+                {...register("measure_type", {
+                  required: "Tipo de medição é obrigatório",
+                })}
+              />
+              Água
+            </label>
+            <label className="input-label measure_type">
+              <input
+                type="radio"
+                id="measure_type"
+                value="GAS"
+                {...register("measure_type", {
+                  required: "Tipo de medição é obrigatório",
+                })}
+              />
+              Gás
+            </label>
+            {errors.measure_type && (
+              <p className="error-message">{errors.measure_type.message}</p>
             )}
-          />
-        </div>
+          </div>
 
-        <label className="input-label">
-          Código de cliente
-          <input
-            type="text"
-            id="customer_code"
-            placeholder="xyz"
-            {...register("customer_code", {
-              required: "Código de cliente é obrigatório",
-            })}
-          />
-          {errors.customer_code && (
-            <p className="error-message">{errors.customer_code.message}</p>
-          )}
-        </label>
+          <div className="input-label">
+            <div>
+              <label htmlFor="image_base64">Imagem</label>
+              <Tooltip />
+            </div>
+            <Controller
+              name="image"
+              control={control}
+              rules={{ required: "A imagem é obrigatória" }}
+              render={() => (
+                <>
+                  <CameraCapture onCapture={handleImageCapture} />
+                  {errors.image && (
+                    <p className="error-message">{errors.image.message}</p>
+                  )}
+                </>
+              )}
+            />
+          </div>
 
-        <label className="input-label">
-          Data da medição
-          <input
-            type="date"
-            id="measure_datetime"
-            {...register("measure_datetime", {
-              required: "Data da medição é obrigatória",
-            })}
-          />
-          {errors.measure_datetime && (
-            <p className="error-message">{errors.measure_datetime.message}</p>
-          )}
-        </label>
+          <label className="input-label">
+            Código de cliente
+            <input
+              type="text"
+              id="customer_code"
+              placeholder="xyz"
+              {...register("customer_code", {
+                required: "Código de cliente é obrigatório",
+              })}
+            />
+            {errors.customer_code && (
+              <p className="error-message">{errors.customer_code.message}</p>
+            )}
+          </label>
 
-        <button type="submit">Medir</button>
-      </form>
-    </section>
+          <label className="input-label">
+            Data da medição
+            <input
+              type="date"
+              id="measure_datetime"
+              {...register("measure_datetime", {
+                required: "Data da medição é obrigatória",
+              })}
+            />
+            {errors.measure_datetime && (
+              <p className="error-message">{errors.measure_datetime.message}</p>
+            )}
+          </label>
+
+          <button type="submit">Medir</button>
+        </form>
+      </section>
+
+      {modalOpen && <ConfirmForm setModalOpen={() => setModalOpen(false)} />}
+    </>
   );
 }
 
