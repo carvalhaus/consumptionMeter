@@ -4,6 +4,7 @@ import Home from "./pages/Home";
 import "./index.css";
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import MeasurementHistory from "./pages/MeasurementHistory";
+import ContextAPIProvider from "./contexts/ContextAPI";
 
 const router = createBrowserRouter([
   {
@@ -18,6 +19,8 @@ const router = createBrowserRouter([
 
 createRoot(document.getElementById("root")!).render(
   <StrictMode>
-    <RouterProvider router={router} />
+    <ContextAPIProvider>
+      <RouterProvider router={router} />
+    </ContextAPIProvider>
   </StrictMode>
 );
