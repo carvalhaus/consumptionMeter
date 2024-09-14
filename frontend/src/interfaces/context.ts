@@ -1,4 +1,8 @@
-import { IMeasurementsParams, IMeasurementsResponse } from "./measurements";
+import {
+  IMeasurementRequest,
+  IMeasurementsParams,
+  IMeasurementsResponse,
+} from "./measurements";
 
 export interface IContextAPI {
   measurements: IMeasurementsResponse | null;
@@ -6,4 +10,6 @@ export interface IContextAPI {
   error: string | null;
   getMeasurements: (params: IMeasurementsParams) => Promise<void>;
   setMeasurements: (measurements: IMeasurementsResponse | null) => void;
+  postMeasurement: (measurement: IMeasurementRequest) => void;
+  setUploadMeasurement: (data: IMeasurementRequest | null) => void;
 }

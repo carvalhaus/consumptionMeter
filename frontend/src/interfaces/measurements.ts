@@ -12,6 +12,13 @@ export interface IMeasurementsResponse {
   error_description?: string;
 }
 
+export interface IMeasurementRequest {
+  image: string;
+  customer_code: string;
+  measure_datetime: string;
+  measure_type: "WATER" | "GAS" | "";
+}
+
 export interface IMeasurementsParams {
   customer_code: string;
   measure_type?: string;
