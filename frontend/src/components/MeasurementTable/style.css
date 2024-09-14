@@ -1,0 +1,33 @@
+.measurement-table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.measurement-table th,
+.measurement-table td {
+  padding: 0.625rem;
+  text-align: center;
+  border-bottom: 1px solid #ddd;
+}
+
+.measurement-table th {
+  color: #2d6a4f;
+}
+
+.measurement-table tr {
+}
+
+.measurement-table tr:hover {
+  background-color: #e5f2e5;
+}
+
+.measurement-table tbody tr td:first-child {
+  font-weight: 600;
+}
+
+@media (max-width: 768px) {
+  .measurement-table th,
+  .measurement-table td {
+    padding: 0.5rem;
+  }
+}
