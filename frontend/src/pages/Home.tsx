@@ -14,7 +14,7 @@ function Home() {
 
       <p>
         Visualize o seu{" "}
-        <Link to={"history"} className="history">
+        <Link to={"history"} className="link">
           histórico
         </Link>{" "}
         de medições
