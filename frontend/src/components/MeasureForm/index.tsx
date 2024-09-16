@@ -59,9 +59,9 @@ function MeasureForm() {
     try {
       setIsModalOpen(true);
       await postMeasurement(measurementRequest);
-      console.log("Measurement posted successfully");
+      console.log("Medição salva com sucesso!");
     } catch (error) {
-      console.error("Error posting measurement:", error);
+      console.error("Erro na medição:", error);
     } finally {
       reset();
       setIsCameraOpen(false);

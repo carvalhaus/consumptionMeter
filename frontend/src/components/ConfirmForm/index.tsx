@@ -1,5 +1,6 @@
 import "./style.css";
 import spinning from "../../assets/spinning.svg";
+import close from "../../assets/close.svg";
 import { useApi } from "../../contexts/ContextAPI";
 import { IMeasurementPostResponse } from "../../interfaces/measurements";
 import { SubmitHandler, useForm } from "react-hook-form";
@@ -10,7 +11,7 @@ interface ConfirmFormProps {
 }
 
 function ConfirmForm({ setIsModalOpen }: ConfirmFormProps) {
-  const { loading, postResponse, patchMeasurement } = useApi();
+  const { loading, postResponse, patchMeasurement, cancelRequest } = useApi();
 
   const {
     register,
@@ -45,8 +46,13 @@ function ConfirmForm({ setIsModalOpen }: ConfirmFormProps) {
 
       setIsModalOpen();
     } catch (error) {
-      console.error("Error submitting form:", error);
+      console.error("Erro na confirmação:", error);
     }
+  };
+
+  const handleCancel = () => {
+    cancelRequest();
+    setIsModalOpen();
   };
 
   return (
@@ -56,9 +62,16 @@ function ConfirmForm({ setIsModalOpen }: ConfirmFormProps) {
           <>
             <img src={spinning} alt="Loading" className="spin-slow" />
             <p>Carregando...</p>
+            <button onClick={handleCancel}>Cancelar</button>
           </>
         ) : (
-          <form onSubmit={handleSubmit(onSubmit)} className="">
+          <form onSubmit={handleSubmit(onSubmit)}>
+            <img
+              src={close}
+              alt="Fechar"
+              className="close-form"
+              onClick={handleCancel}
+            />
             <h3>Confirme a leitura realizada</h3>
             <a href={postResponse?.image_url} target="_blank" className="link">
               Visualize a foto que você tirou

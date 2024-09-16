@@ -33,6 +33,7 @@
   flex-direction: column;
   align-items: center;
   justify-content: center;
+  position: relative;
 }
 
 .confirm-form img {
@@ -45,4 +46,16 @@
   font-size: 1.5rem;
   font-weight: 600;
   color: #2d6a4f;
+}
+
+.confirm-form .close-form {
+  position: absolute;
+  top: -1rem;
+  right: 0rem;
+  border: none;
+  padding: 0.5rem;
+  border-radius: 50%;
+  cursor: pointer;
+  z-index: 1;
+  width: 2rem;
 }
