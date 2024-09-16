@@ -14,7 +14,7 @@ services:
     ports:
       - "3000:3000"
     volumes:
-      - .:/app
+      - ./backend:/app
       - /app/node_modules
     environment:
       GEMINI_API_KEY: "${GEMINI_API_KEY}"
