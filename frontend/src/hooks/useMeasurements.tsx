@@ -30,7 +30,7 @@ function useMeasurements() {
 
       setLoading(true);
 
-      let url = `${import.meta.env.VITE_BASE_URL}/${customer_code}/list`;
+      let url = `http://localhost:3000/${customer_code}/list`;
 
       if (measure_type) {
         url += `?measure_type=${measure_type}`;
@@ -73,7 +73,7 @@ function useMeasurements() {
       setLoading(true);
 
       const { data } = await axios.post<IMeasurementPostResponse>(
-        `${import.meta.env.VITE_BASE_URL}/upload`,
+        `http://localhost:3000/upload`,
         measurementRequest,
         { cancelToken: cancelTokenRef.current.token }
       );
@@ -112,7 +112,7 @@ function useMeasurements() {
       cancelTokenRef.current = axios.CancelToken.source();
 
       const { data } = await axios.patch(
-        `${import.meta.env.VITE_BASE_URL}/confirm`,
+        `http://localhost:3000/confirm`,
         {
           measure_uuid: measure_uuid,
           confirmed_value: measure_value,
