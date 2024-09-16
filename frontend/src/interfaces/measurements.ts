@@ -23,6 +23,7 @@ export interface IMeasurementPostResponse {
   image_url: string;
   measure_value: number;
   measure_uuid: string;
+  error_description?: string;
 }
 
 export interface IMeasurementsParams {

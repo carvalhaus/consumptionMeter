@@ -5,6 +5,7 @@ import {
   IMeasurementsParams,
   IMeasurementsResponse,
 } from "../interfaces/measurements";
+import axios from "axios";
 
 function useMeasurements() {
   const [measurements, setMeasurements] =
@@ -27,9 +28,7 @@ function useMeasurements() {
         url += `?measure_type=${measure_type}`;
       }
 
-      const response = await fetch(url);
-
-      const data: IMeasurementsResponse = await response.json();
+      const { data } = await axios.get<IMeasurementsResponse>(url);
 
       if (data.error_description) {
         setError(data.error_description);
@@ -39,8 +38,8 @@ function useMeasurements() {
         setError(null);
       }
     } catch (err) {
-      if (err instanceof Error) {
-        setError(err.message);
+      if (axios.isAxiosError(err)) {
+        setError(err.response?.data?.message || err.message);
       } else {
         setError("An unknown error occurred");
       }
@@ -54,15 +53,10 @@ function useMeasurements() {
     try {
       setLoading(true);
 
-      const response = await fetch(`${import.meta.env.VITE_BASE_URL}/upload`, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(measurementRequest),
-      });
-
-      const data = await response.json();
+      const { data } = await axios.post<IMeasurementPostResponse>(
+        `${import.meta.env.VITE_BASE_URL}/upload`,
+        measurementRequest
+      );
 
       if (data.error_description) {
         setError(data.error_description);
@@ -72,8 +66,8 @@ function useMeasurements() {
         setError(null);
       }
     } catch (err) {
-      if (err instanceof Error) {
-        setError(err.message);
+      if (axios.isAxiosError(err)) {
+        setError(err.response?.data?.message || err.message);
       } else {
         setError("An unknown error occurred");
       }
@@ -88,21 +82,13 @@ function useMeasurements() {
     measure_value: number
   ) => {
     try {
-      const response = await fetch(`${import.meta.env.VITE_BASE_URL}/confirm`, {
-        method: "PATCH",
-        headers: {
-          Accept: "application/json",
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
+      const { data } = await axios.patch(
+        `${import.meta.env.VITE_BASE_URL}/confirm`,
+        {
           measure_uuid: measure_uuid,
           confirmed_value: measure_value,
-        }),
-      });
-
-      console.log("Response status:", response.status);
-
-      const data = await response.json();
+        }
+      );
 
       if (data.error_description) {
         setError(data.error_description);
@@ -111,8 +97,8 @@ function useMeasurements() {
         setError(null);
       }
     } catch (err) {
-      if (err instanceof Error) {
-        setError(err.message);
+      if (axios.isAxiosError(err)) {
+        setError(err.response?.data?.message || err.message);
       } else {
         setError("An unknown error occurred");
       }
