@@ -18,4 +18,5 @@ export interface IContextAPI {
     measure_uuid: string,
     confirmed_value: number
   ) => Promise<void>;
+  cancelRequest: () => void;
 }
