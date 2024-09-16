@@ -6,10 +6,10 @@ import { SubmitHandler, useForm } from "react-hook-form";
 import { useEffect } from "react";
 
 interface ConfirmFormProps {
-  setModalOpen: () => void;
+  setIsModalOpen: () => void;
 }
 
-function ConfirmForm({ setModalOpen }: ConfirmFormProps) {
+function ConfirmForm({ setIsModalOpen }: ConfirmFormProps) {
   const { loading, postResponse, patchMeasurement } = useApi();
 
   const {
@@ -43,7 +43,7 @@ function ConfirmForm({ setModalOpen }: ConfirmFormProps) {
 
       await patchMeasurement(measure_uuid, parsedValue);
 
-      setModalOpen();
+      setIsModalOpen();
     } catch (error) {
       console.error("Error submitting form:", error);
     }

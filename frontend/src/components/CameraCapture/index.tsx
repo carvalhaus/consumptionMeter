@@ -1,22 +1,30 @@
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useRef } from "react";
 import "./style.css";
 import camera from "../../assets/camera.svg";
 import trash from "../../assets/trash.svg";
 
 interface CameraCaptureProps {
   onCapture: (image: string) => void;
+  isCameraOpen: boolean;
+  setIsCameraOpen: (open: boolean) => void;
+  capturedImage: string | null;
+  setCapturedImage: (image: string | null) => void;
 }
 
-function CameraCapture({ onCapture }: CameraCaptureProps) {
+function CameraCapture({
+  onCapture,
+  isCameraOpen,
+  setIsCameraOpen,
+  capturedImage,
+  setCapturedImage,
+}: CameraCaptureProps) {
   const videoRef = useRef<HTMLVideoElement | null>(null);
   const canvasRef = useRef<HTMLCanvasElement | null>(null);
-  const [image, setImage] = useState<string | null>(null);
-  const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
 
   useEffect(() => {
     let stream: MediaStream | null = null;
 
-    if (isModalOpen) {
+    if (isCameraOpen) {
       const startCamera = async () => {
         try {
           if (videoRef.current) {
@@ -38,7 +46,7 @@ function CameraCapture({ onCapture }: CameraCaptureProps) {
         stream.getTracks().forEach((track) => track.stop());
       }
     };
-  }, [isModalOpen]);
+  }, [isCameraOpen]);
 
   function capturePhoto() {
     const canvas = canvasRef.current;
@@ -48,14 +56,14 @@ function CameraCapture({ onCapture }: CameraCaptureProps) {
     if (canvas && context && video) {
       context.drawImage(video, 0, 0, canvas.width, canvas.height);
       const imageData = canvas.toDataURL("image/png");
-      setImage(imageData);
+      setCapturedImage(imageData);
       onCapture(imageData);
-      setIsModalOpen(false);
+      setIsCameraOpen(false);
     }
   }
 
   function closeModal() {
-    setIsModalOpen(false);
+    setIsCameraOpen(false);
   }
 
   return (
@@ -64,10 +72,10 @@ function CameraCapture({ onCapture }: CameraCaptureProps) {
         src={camera}
         alt="Ícone de câmera"
         className="camera-button"
-        onClick={() => setIsModalOpen(true)}
+        onClick={() => setIsCameraOpen(true)}
       />
 
-      {isModalOpen && (
+      {isCameraOpen && (
         <div className="modal">
           <div className="modal-content">
             <video
@@ -95,15 +103,19 @@ function CameraCapture({ onCapture }: CameraCaptureProps) {
         </div>
       )}
 
-      {image && (
+      {capturedImage && (
         <>
           <img
             src={trash}
             className="delete-picture"
             alt="Icone de deletar"
-            onClick={() => setImage(null)}
+            onClick={() => setCapturedImage(null)}
           />
-          <img src={image} className="image-captured" alt="Imagem Capturada" />
+          <img
+            src={capturedImage}
+            className="image-captured"
+            alt="Imagem Capturada"
+          />
         </>
       )}
     </div>

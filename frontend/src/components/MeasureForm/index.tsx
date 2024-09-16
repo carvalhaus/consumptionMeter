@@ -17,13 +17,16 @@ interface IMeasureForm {
 function MeasureForm() {
   const { postMeasurement } = useApi();
 
-  const [modalOpen, setModalOpen] = useState<boolean>(false);
+  const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
+  const [isCameraOpen, setIsCameraOpen] = useState<boolean>(false);
+  const [capturedImage, setCapturedImage] = useState<string | null>(null);
 
   const {
     control,
     register,
     handleSubmit,
     setValue,
+    reset,
     formState: { errors },
   } = useForm<IMeasureForm>({
     defaultValues: {
@@ -54,11 +57,15 @@ function MeasureForm() {
     console.log(measurementRequest);
 
     try {
-      setModalOpen(true);
+      setIsModalOpen(true);
       await postMeasurement(measurementRequest);
       console.log("Measurement posted successfully");
     } catch (error) {
       console.error("Error posting measurement:", error);
+    } finally {
+      reset();
+      setIsCameraOpen(false);
+      setCapturedImage(null);
     }
   };
 
@@ -110,7 +117,13 @@ function MeasureForm() {
               rules={{ required: "A imagem é obrigatória" }}
               render={() => (
                 <>
-                  <CameraCapture onCapture={handleImageCapture} />
+                  <CameraCapture
+                    onCapture={handleImageCapture}
+                    isCameraOpen={isCameraOpen}
+                    setIsCameraOpen={setIsCameraOpen}
+                    capturedImage={capturedImage}
+                    setCapturedImage={setCapturedImage}
+                  />
                   {errors.image && (
                     <p className="error-message">{errors.image.message}</p>
                   )}
@@ -152,7 +165,9 @@ function MeasureForm() {
         </form>
       </section>
 
-      {modalOpen && <ConfirmForm setModalOpen={() => setModalOpen(false)} />}
+      {isModalOpen && (
+        <ConfirmForm setIsModalOpen={() => setIsModalOpen(false)} />
+      )}
     </>
   );
 }
